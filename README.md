@@ -1,5 +1,7 @@
 # HappyBirthdayEth
 
+NOTE: you will need to specify a little extra gas when sending a transaction (I'd recommend 80000 max gas cost)
+
 Contract address:
 
     0x90a5c5bccccc9358766b2be66bddae9e5c7d7ae3
