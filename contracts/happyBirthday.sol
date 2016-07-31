@@ -2,35 +2,36 @@ contract happyBirthday {
     event GuestArrived(address guest);
     event GuestSigned(address guest, string name);
 
-    uint gift = 1 ether;
-    address[] public giftPaid;
-    mapping (address=>string) public guestList;
+    uint constant gift = 1 ether;
+    mapping (address=>Guest) public guestList;
+
+    struct Guest {
+        string name;
+        bool giftPaid;
+    }
 
     modifier newGuestOnly(){
-        for (uint i; i < giftPaid.length; i++){
-            if (msg.sender==giftPaid[i])
-                throw;
-        }
+        if (guestList[msg.sender].giftPaid)
+            throw;
         _
     }
 
     function () newGuestOnly() {
         if(!msg.sender.send(gift))
             throw;
-        giftPaid.push(msg.sender);
+        guestList[msg.sender].giftPaid=true;
         GuestArrived(msg.sender);
     }
 
     function signGuestList(string _guestName) newGuestOnly() {
-        guestList[msg.sender]=_guestName;
+        guestList[msg.sender].name=_guestName;
+        guestList[msg.sender].giftPaid=true;
         if(!msg.sender.send(gift))
             throw;
-        giftPaid.push(msg.sender);
         GuestSigned(msg.sender,_guestName);
     }
 
     function fund(){
 
     }
-
 }
